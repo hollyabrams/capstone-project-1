@@ -36,9 +36,8 @@ Users will be taken to a page displaying the results of their search.
 #### Character Detail
 By clicking on a character, users will be taken to a detail page displaying information on that character, such as name, description, and image.
 
-
 ### FEATURES BEYOND CRUD
-The site will go beyond the standard CRUD functionality by offering advanced search and filtering capabilities, as well as the ability for users to submit feedback and corrections to the character data. Additionally, the site will also incorporate visual aids such as images to enhance the user experience.
+The site will go beyond the standard CRUD functionality by offering advanced search and filtering capabilities. Additionally, the site will also incorporate visual aids such as images to enhance the user experience.
 
 ### STRETCH GOALS
 1. Feedback: Users will have the option to submit feedback and corrections to the character data on the detail page.
