@@ -21,8 +21,6 @@ I will collect and organize the data obtained from the Disney API into a central
 I will build a database-driven website using Python, Flask, Jinja, SQLAlchemy, WTForms, etc. to present the data in a clear and easy-to-use format.
 #### Advanced Search and Filtering
 I will create an advanced search and filtering system to allow users to easily find the characters they are looking for.
-#### User Feedback
-I will allow users to submit feedback and corrections to the character data, in order to keep our database accurate and up-to-date.
 #### Database Schema
 ![databaseschema](static/images/disney-api-schema.png)
 
@@ -37,16 +35,16 @@ Users will be taken to a page displaying the results of their search.
 ![characterdetails](static/images/disney-api-character-detail.png)
 #### Character Detail
 By clicking on a character, users will be taken to a detail page displaying information on that character, such as name, description, and image.
-#### Feedback
-Users will have the option to submit feedback and corrections to the character data on the detail page.
+
 
 ### FEATURES BEYOND CRUD
 The site will go beyond the standard CRUD functionality by offering advanced search and filtering capabilities, as well as the ability for users to submit feedback and corrections to the character data. Additionally, the site will also incorporate visual aids such as images to enhance the user experience.
 
 ### STRETCH GOALS
-1. Character Comparisons: Enable users to compare and contrast different Disney characters, such as their abilities, strengths, and weaknesses.
-2. Character Quizzes: Create quizzes and trivia games based on Disney characters to engage users and test their knowledge.
-3. Mobile App: Develop a mobile app version of the Disney Character Encyclopedia to provide users with an even more convenient and accessible way to access the information they need.
-4. Historical Context: Add historical context to the character data, such as the release date of their first appearance and how their character has evolved over time.
-5. Fan Art and Fan Fiction: Incorporate fan-created art and fan fiction into the character pages, allowing users to showcase their own creativity and passion for Disney.
-6. Audio and Video: Add audio and video content to the character pages, such as clips from their movies and TV shows.
+1. Feedback: Users will have the option to submit feedback and corrections to the character data on the detail page.
+2. Character Comparisons: Enable users to compare and contrast different Disney characters, such as their abilities, strengths, and weaknesses.
+3. Character Quizzes: Create quizzes and trivia games based on Disney characters to engage users and test their knowledge.
+4. Mobile App: Develop a mobile app version of the Disney Character Encyclopedia to provide users with an even more convenient and accessible way to access the information they need.
+5. Historical Context: Add historical context to the character data, such as the release date of their first appearance and how their character has evolved over time.
+6. Fan Art and Fan Fiction: Incorporate fan-created art and fan fiction into the character pages, allowing users to showcase their own creativity and passion for Disney.
+7. Audio and Video: Add audio and video content to the character pages, such as clips from their movies and TV shows.
