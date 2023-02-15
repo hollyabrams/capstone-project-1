@@ -1,7 +1,7 @@
 # PROPOSAL
 
-## DISNEY CHARACTERVERSE
-![!characterbanner](static/images/disney-api-character-banner.jpeg)
+## SOME GOOD NEWS
+
 ### OVERVIEW
 The [Disney API](https://disneyapi.dev/) provides access to a wealth of information about Disney characters, including their names, descriptions, images, films, videogames and more. The functionality of the app will include the ability to register, login, favorite, and search for and view information on Disney characters.
 
