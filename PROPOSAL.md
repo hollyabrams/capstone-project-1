@@ -1,6 +1,7 @@
 # PROPOSAL
 
-## SOME GOOD NEWS
+## DISNEY CHARACTERVERSE
+![disneybanner](static/images/disney-api-character-banner.jpeg)
 
 ### OVERVIEW
 The [Disney API](https://disneyapi.dev/) provides access to a wealth of information about Disney characters, including their names, descriptions, images, films, videogames and more. The functionality of the app will include the ability to register, login, favorite, and search for and view information on Disney characters.
@@ -16,7 +17,7 @@ The data I plan on using is obtained from the [Disney API](https://disneyapi.dev
 
 ### APPROACH
 #### Collection and Organization of Data
-I will collect and organize the data obtained from the Disney API into a centralized database.
+The main source of data will be obtained from the Disney API. I will also organize User Registration and Feedback into a centralized database.
 #### Website Development
 I will build a database-driven website using Python, Flask, Jinja, SQLAlchemy, WTForms, etc. to present the data in a clear and easy-to-use format.
 #### Advanced Search and Filtering
