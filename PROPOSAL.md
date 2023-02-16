@@ -23,7 +23,7 @@ I will build a database-driven website using Python, Flask, Jinja, SQLAlchemy, W
 #### Advanced Search and Filtering
 I will create an advanced search and filtering system to allow users to easily find the characters they are looking for.
 #### Database Schema
-![databaseschema](/static/images/disney-api-schema.png)
+![databaseschema](/static/images/disney-app-schema.png)
 
 ### USER FLOW
 #### User Accounts
