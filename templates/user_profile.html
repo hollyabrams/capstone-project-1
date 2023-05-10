@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+User Profile
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-5">{{ user.username }}'s Profile</h1>
+
+<form method="POST">
+    {{form.hidden_tag()}}
+
+    {% for field in form.errors %}
+    <div class="alert alert-danger">{{ field }}:
+        <ul>
+            {% for error in form.errors[field] %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <div class="form-group row mt-1">
+        {{field.label(class="col-sm-2 col-form-label")}}
+        <div class="col-sm-10">
+            {{field(class="form-control")}}
+        </div>
+    </div>
+    {% endfor %}
+
+    <button class="btn btn-primary mt-5">Update</button>
+</form>
+
+<form action="{{ url_for('delete_user', username=user.username) }}" method="POST" class="d-inline">
+  {{ form.hidden_tag() }}
+  <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
+</form>
+
+{% endblock %}
+

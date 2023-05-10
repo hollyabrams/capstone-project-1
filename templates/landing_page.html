@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Welcome to the Disney Characterverse</h1>
+  <p>Discover your favorite Disney characters, along with the movies they star in!</p>
+
+  <div class="buttons">
+    <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
+    <a href="{{ url_for('login') }}" class="btn btn-secondary">Log In</a>
+    <a href="{{ url_for('guest') }}" class="btn btn-outline-primary">Continue as Guest</a>
+  </div>
+{% endblock %}

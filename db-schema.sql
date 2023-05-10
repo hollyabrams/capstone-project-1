@@ -46,3 +46,4 @@ REFERENCES "Character" ("_id");
 ALTER TABLE "Feedback" ADD CONSTRAINT "fk_Feedback_id" FOREIGN KEY("id")
 REFERENCES "User" ("id");
 
+{"getAllCharacters":"/characters","getOneCharacterById":"/characters/:id","getCharacter":"/character","getCharacterById":"/character/:id"}
