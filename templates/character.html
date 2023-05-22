@@ -1,39 +1,81 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card mt-2 character-card">
-                <img class="card-img-top" src="{{ data.imageUrl }}" alt="{{ data.name }}">
-                <div class="card-body">
-                    <h3 class="card-title text-center mb-4" style="font-weight: bold; color: #0275d8;">{{ data.name }}</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p class="card-text">
-                                <strong>Films:</strong>
-                                {{ data.films|join(', ') }}
-                            </p>
-                            <p class="card-text">
-                                <strong>TV Shows:</strong>
-                                {{ data.tvShows|join(', ') }}
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="card-text">
-                                <strong>Video Games:</strong>
-                                {{ data.videoGames|join(', ') }}
-                            </p>
-                            <p class="card-text">
-                                <strong>Park Attractions:</strong>
-                                {{ data.parkAttractions|join(', ') }}
-                            </p>
-                        </div>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center character-info-container p-3">
+                    <img src="{{ data.imageUrl }}" alt="{{ data.name }}" class="character-image rounded">
+                    <h2 class="mt-4 character-name">{{ data.name }}</h2>
+                    {% if current_user.is_authenticated %}
+                    {% set is_favorite = False %}
+                    {% for favorite in current_user.favorite_characters %}
+                        {% if favorite.character_id == data._id %}
+                            {% set is_favorite = True %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if is_favorite %}
+                        <form method="post" action="{{ url_for('unfavorite_character', character_id=data._id) }}" class="d-inline">
+                            <button type="submit" class="btn btn-link text-danger p-0"><i id="favorite-icon" class="fas fa-heart"></i></button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{{ url_for('favorite_character', character_id=data._id) }}" class="d-inline">
+                            <button type="submit" class="btn btn-link text-danger p-0"><i id="favorite-icon" class="far fa-heart"></i></button>
+                        </form>
+                    {% endif %}
+                {% endif %}                                                         
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #0275d8;">Films</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ data.films|join(', ') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #5bc0de;">TV Shows</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ data.tvShows|join(', ') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #5cb85c;">Video Games</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ data.videoGames|join(', ') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card">
+                    <div class="card-header text-white" style="background-color: #f0ad4e;">Park Attractions</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ data.parkAttractions|join(', ') }}</p>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-md-12 text-center">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">Back to Characters</a>
+            {% else %}
+                <a href="{{ url_for('guest') }}" class="btn btn-primary mt-3">Back to Characters</a>
+            {% endif %}            
+            </div>
+        </div>
     </div>
+    <script>
+        document.getElementById('favorite-icon').addEventListener('click', function() {
+            this.classList.toggle('fas');
+            this.classList.toggle('far');
+        });
+    </script> 
+     
 {% endblock %}
-
-
-

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField
 from wtforms.validators import InputRequired, Length, DataRequired, Email
 
 from models import User
@@ -40,3 +40,6 @@ class EditUserForm(FlaskForm):
     password = PasswordField('New Password (optional)', validators=[Length(min=8, max=120, message="Password must be at least 8 characters long.")])
 
  
+class AddFavoriteCharacterForm(FlaskForm):
+    character_id = IntegerField('Character ID', validators=[DataRequired()])
+    submit = SubmitField('Add to Favorites')

@@ -1,12 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Welcome to the Disney Characterverse</h1>
-  <p>Discover your favorite Disney characters, along with the movies they star in!</p>
+    <div class="jumbotron text-center mt-5">
+        <h1 class="display-4">Welcome to the Disney Characterverse!</h1>
+        <p class="lead">Explore the magical Disney universe and uncover the movies and park attractions featuring your favorite characters!</p>
+    </div>
 
-  <div class="buttons">
-    <a href="{{ url_for('register') }}" class="btn btn-primary">Register</a>
-    <a href="{{ url_for('login') }}" class="btn btn-secondary">Log In</a>
-    <a href="{{ url_for('guest') }}" class="btn btn-outline-primary">Continue as Guest</a>
-  </div>
+    <div class="buttons mt-5 text-center">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mx-2">Register</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg mx-2">Log In</a>
+        <a href="{{ url_for('guest') }}" class="btn btn-outline-primary btn-lg mx-2">Continue as Guest</a>
+    </div>
+
+    <div class="gifs-container mt-5">
+        <div class="gifs-wrapper">
+            <div class="gifs-scroll">
+                <img src="https://media.giphy.com/media/2LMSyE8Sw5cnC/giphy.gif" alt="Peter Pan">
+                <img src="https://media.giphy.com/media/12gy1aGOnShDwI/giphy.gif" alt="Mickey Mouse">
+                <img src="https://media.giphy.com/media/CqGm2DE1eX5iE/giphy.gif" alt="Dumbo">
+                <img src="https://media.giphy.com/media/YFis3URdQJ6qA/giphy.gif" alt="Snow White">
+                <img src="https://media.giphy.com/media/bm5ogvN102mJO/giphy.gif" alt="Pongo and Perdita">
+                <img src="https://media.giphy.com/media/x28cIQSn19Tbi/giphy.gif" alt="Lady and the Tramp">
+                <img src="https://media.giphy.com/media/ewrUvci1XM8sRLGqm0/giphy.gif" alt="Mickey, Donald, and Goofy">
+                <img src="https://media.giphy.com/media/AqgJZvYstAZyw/giphy.gif" alt="Thumper">
+            </div>
+        </div>
+    </div>
 {% endblock %}
+

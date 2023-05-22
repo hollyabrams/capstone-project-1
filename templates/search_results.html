@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Search Results</h1>
+    <h1 class="mt-4">Search Results</h1>
     {% if characters %}
         <div class="row">
             {% for character in characters %}
                 {% if character is mapping %}
                     <div class="col-md-3 mb-3">
-                        <div class="card">
+                        <div class="card search-result-card">
                             <img src="{{ character.imageUrl }}" class="card-img-top" alt="{{ character.name }}">
                             <div class="card-body">
                                 <h5 class="card-title text-center">{{ character.name }}</h5>

@@ -22,24 +22,14 @@ body {
     margin-left: auto;
 }
 
-.card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.card:not(.character-card) {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: transform 0.3s;
+.card {
     border: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
 }
 
-.card:not(.character-card):hover {
-    transform: scale(1.1);
+.card:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .card-img-top {
@@ -53,30 +43,179 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100px;
 }
 
-.character-card {
-    display: flex;
-    flex-direction: column;
-    border: none;
+.character-info-container {
+    background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s;
 }
 
-.character-card:hover {
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.character-card .card-img-top {
+.character-image {
     object-fit: contain;
     width: 100%;
     height: 250px;
 }
 
-.character-card .card-body {
-    flex: 1;
+.character-name {
+    font-weight: bold;
+    color: #0275d8;
+}
+
+.card.character-card-index:hover,
+.card.search-result-card:hover {
+    transform: scale(1.1);
+}
+
+.card.character-card-index,
+.card.search-result-card {
+    transition: transform 0.3s;
+}
+
+.card-link,
+.card-link .card-title {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link:hover .card-title {
+    color: black;
+    text-decoration: none;
+}
+
+.gifs-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.gifs-wrapper {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    animation: scroll 20s linear infinite;
+}
+
+.gifs-scroll {
+    display: flex;
+}
+
+.gifs-scroll img {
+    width: 300px;
+    height: auto;
+    margin-right: 10px;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(-100% - 10px));
+    }
+}
+
+/* Light Mode Styles */
+body {
+    background-color: #f8f9fa;
+    color: #000000;
+}
+
+/* Dark Mode Styles */
+.dark-mode-button .fa-crown {
+    display: none;
+}
+
+.dark-mode-button .fa-hat-wizard {
+    display: inline-block;
+}
+
+body.dark-mode .dark-mode-button .fa-crown {
+    display: inline-block;
+}
+
+body.dark-mode .dark-mode-button .fa-hat-wizard {
+    display: none;
+}
+
+body.dark-mode {
+    background-color: #21073a;
+    color: #ffffff;
+}
+
+.dark-mode .jumbotron,
+.dark-mode .jumbotron h1,
+.dark-mode .jumbotron p,
+.dark-mode .card-header,
+.dark-mode .card-body,
+.dark-mode .card-title,
+.dark-mode .card-text,
+.dark-mode .btn-primary {
+    color: #ffffff;
+}
+
+
+.dark-mode .character-info-container h2.character-name,
+.dark-mode .character-info-container .btn-link,
+.dark-mode .card.character-card-index:hover,
+.dark-mode .card.search-result-card:hover,
+.dark-mode .card-link,
+.dark-mode .card-link .card-title {
+    color: #0275d8;
+}
+
+.dark-mode .navbar-light .navbar-brand,
+.dark-mode .navbar-light .navbar-nav .nav-link,
+.dark-mode .btn-primary,
+.dark-mode .card-header,
+.dark-mode .card-title,
+.dark-mode .card-link,
+.dark-mode .bg-white p {
+    color: #000000 !important;
+    /* Set font color to dark */
+}
+
+.dark-mode .card {
+    background-color: grey;
+    color: white;
+}
+
+.dark-mode .card-img-top,
+.dark-mode .character-image {
+    filter: grayscale(100%) brightness(70%);
+}
+
+.dark-mode .btn-primary:hover,
+.dark-mode .btn-primary:focus {
+    color: #eeeeee !important;
+    text-decoration: none;
+}
+
+.dark-mode .bg-white {
+    background-color: #ffffff !important;
+    /* Set background color to white */
+}
+
+.dark-mode .bg-white p {
+    color: #000000;
+    /* Set font color to dark */
+}
+
+.card.character-card-index,
+.card.search-result-card {
+    background-color: #ffffff;
+    /* Set background color to white */
+    transition: transform 0.3s;
+}
+
+.dark-mode .card.character-card-index,
+.dark-mode .card.search-result-card {
+    background-color: #ffffff;
+    /* Set background color to white */
+    color: #000000;
+    /* Set font color to dark */
+}
+
+.dark-mode .card-img-top,
+.dark-mode .character-image {
+    filter: none;
+    /* Remove grayscale filter */
 }

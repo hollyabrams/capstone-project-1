@@ -1,5 +1,5 @@
-from app import app, db
-from models import User
+from app import app
+from models import User, db
 
 def seed_database():
     # Clear existing data

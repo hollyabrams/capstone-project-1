@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
@@ -14,9 +15,22 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     favorite_characters = db.relationship('FavoriteCharacter', backref='user', lazy=True)
 
+    # Flask-Login integration
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):  
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
-    
+        
     @classmethod
     def register(cls, username, password, email):
         """Register a user, hashing their password."""
@@ -56,11 +70,15 @@ class User(db.Model):
 class FavoriteCharacter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     character_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)  
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     added_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    name = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String, nullable=True) 
 
     def __repr__(self):
-        return f"FavoriteCharacter('{self.character_id}', '{self.user_id}')"
+        return f"FavoriteCharacter('{self.name}','{self.character_id}', '{self.user_id}')"
+
+
 
 
 def connect_db(app):

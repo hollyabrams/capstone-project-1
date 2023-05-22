@@ -6,22 +6,22 @@ User Profile
 
 {% block content %}
 
-<h1 class="mb-5">{{ user.username }}'s Profile</h1>
+<h1 class="mt-4 mb-3">Hello, {{ user.username }}!</h1>
 
 <form method="POST">
-    {{form.hidden_tag()}}
+    {{edit_form.csrf_token}}
 
-    {% for field in form.errors %}
+    {% for field in edit_form.errors %}
     <div class="alert alert-danger">{{ field }}:
         <ul>
-            {% for error in form.errors[field] %}
+            {% for error in edit_form.errors[field] %}
             <li>{{ error }}</li>
             {% endfor %}
         </ul>
     </div>
     {% endfor %}
 
-    {% for field in form if field.widget.input_type != 'hidden' %}
+    {% for field in edit_form if field.widget.input_type != 'hidden' %}
     <div class="form-group row mt-1">
         {{field.label(class="col-sm-2 col-form-label")}}
         <div class="col-sm-10">
@@ -30,13 +30,34 @@ User Profile
     </div>
     {% endfor %}
 
-    <button class="btn btn-primary mt-5">Update</button>
+    <button class="btn btn-primary mt-3">Update</button>
 </form>
 
+
 <form action="{{ url_for('delete_user', username=user.username) }}" method="POST" class="d-inline">
-  {{ form.hidden_tag() }}
-  <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
+    {{ edit_form.csrf_token }}
+    <button type="submit" class="btn btn-danger mt-3 mb-5" onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
 </form>
+
+<!-- Favorite characters list -->
+<h2 class="mb-3">Favorite Characters</h2>
+{% if favorite_characters %}
+    <div class="row">
+        {% for favorite in favorite_characters %}
+            <div class="col-md-3 mb-3">
+                <div class="card search-result-card">
+                    <img src="{{ favorite.image_url }}" class="card-img-top" alt="{{ favorite.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ favorite.name }}</h5>
+                        <a href="{{ url_for('single_character', character_id=favorite.character_id) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No favorite characters added yet.</p>
+{% endif %}
 
 {% endblock %}
 
