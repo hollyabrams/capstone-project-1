@@ -1,16 +1,37 @@
+<!-- 
+    This template extends the base.html and represents the Login Page of the website.
+    
+    The 'title' block sets the page title to "Create User".
+
+    The 'content' block includes a form for users to login. The form includes fields for 
+    entering the user credentials and a button to submit the form.
+
+    If there are errors in the form (for instance, incorrect user credentials), 
+    these are displayed at the top of the form. 
+
+    There's also a note at the bottom for users who want to browse as a guest.
+-->
+
 {% extends 'base.html' %}
 
 {% block title %}
+<!-- Page title -->
 Create User
 {% endblock %}
 
 {% block content %}
 
+<!-- Login form wrapper -->
 <div class='mt-5' style="width: 50%; margin: 0 auto;">
+    <!-- Title -->
     <h1 class="mb-3">Login</h1>
+
+    <!-- Form -->
     <form method="POST">
+        <!-- Hidden fields -->
         {{form.hidden_tag()}}
 
+        <!-- Loop over form errors and display them -->
         {% for field in form.errors %}
         <div class="alert alert-danger">{{ field }}:
             <ul>
@@ -21,17 +42,24 @@ Create User
         </div>
         {% endfor %}
 
+        <!-- Loop over form fields (excluding hidden fields) and display them -->
         {% for field in form if field.widget.input_type != 'hidden' %}
         <div class="form-group row mt-1">
+            <!-- Field label -->
             {{field.label(class="col-sm-2 col-form-label")}}
+            <!-- Field input -->
             <div class="col-sm-10">
                 {{field(class="form-control")}}
             </div>
         </div>
         {% endfor %}
 
+        <!-- Submit button -->
         <button class="btn btn-primary mt-5">Login!</button>
     </form>
-</div>
 
+    <!-- Note for guest browsing -->
+    <p class="mt-3">Just want to browse? Use the username <b>'guest'</b> and the password <b>'password'</b> to log in without registering.</p>
+</div>
 {% endblock %}
+

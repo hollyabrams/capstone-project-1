@@ -1,16 +1,33 @@
+<!-- 
+    This template is for the Search Results page of the website. It extends the base.html template,
+    and fills in the 'content' block.
+
+    The 'content' block includes a heading for the page and a check to see if there are any character results from the user's search. If there are, a grid layout is used to display each character's information.
+
+    Each character is represented with a card that includes an image, the character's name, and a 
+    button that links to a more detailed page for that character. The character is only displayed 
+    if it is a mapping (i.e., a dictionary-like object, which is what we expect a character to be).
+
+    If there are no search results, a message indicating this is displayed.
+-->
+
 {% extends "base.html" %}
 
 {% block content %}
     <h1 class="mt-4">Search Results</h1>
+    <!-- Check if there are any characters in the search results -->
     {% if characters %}
         <div class="row">
+            <!-- For each character in the search results -->
             {% for character in characters %}
+                <!-- Only display the character if it is a mapping -->
                 {% if character is mapping %}
                     <div class="col-md-3 mb-3">
                         <div class="card search-result-card">
                             <img src="{{ character.imageUrl }}" class="card-img-top" alt="{{ character.name }}">
                             <div class="card-body">
                                 <h5 class="card-title text-center">{{ character.name }}</h5>
+                                <!-- Link to the details page for the character -->
                                 <a href="{{ url_for('single_character', character_id=character._id) }}" class="btn btn-primary">View Details</a>
                             </div>
                         </div>
@@ -19,9 +36,11 @@
             {% endfor %}
         </div>
     {% else %}
+        <!-- Display a message if there are no search results -->
         <p>No results found. Please try a different search query.</p>
     {% endif %}
 {% endblock %}
+
 
 
 

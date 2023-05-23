@@ -1,18 +1,22 @@
+/* Styling for html and body elements */
 html,
 body {
     height: 100%;
     margin: 0;
 }
 
+/* Displaying body as a flex container with column direction */
 body {
     display: flex;
     flex-direction: column;
 }
 
+/* The wrapper for the content area is set to flex 1, which makes it take up any remaining space */
 .content-wrapper {
     flex: 1;
 }
 
+/* Centring the content within a container, padding is applied and max-width is set */
 .container {
     width: 100%;
     max-width: 960px;
@@ -22,22 +26,26 @@ body {
     margin-left: auto;
 }
 
+/* Styling for cards including border, shadow, and transition effect */
 .card {
     border: none;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s;
 }
 
+/* The card will have a more prominent shadow when hovered */
 .card:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Styling for card images */
 .card-img-top {
     object-fit: contain;
     width: 100%;
     height: 200px;
 }
 
+/* Styling for card body with flex properties for inner elements */
 .card-body {
     flex: 1;
     display: flex;
@@ -45,23 +53,27 @@ body {
     justify-content: space-between;
 }
 
+/* Similar styles as the card class for the character info container */
 .character-info-container {
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s;
 }
 
+/* Styling for character image */
 .character-image {
     object-fit: contain;
     width: 100%;
     height: 250px;
 }
 
+/* Styling for character name */
 .character-name {
     font-weight: bold;
     color: #0275d8;
 }
 
+/* Providing hover and transition effects for character card index and search result cards */
 .card.character-card-index:hover,
 .card.search-result-card:hover {
     transform: scale(1.1);
@@ -72,6 +84,7 @@ body {
     transition: transform 0.3s;
 }
 
+/* Styles to remove the default styling of links in the card link and the card title */
 .card-link,
 .card-link .card-title {
     text-decoration: none;
@@ -83,6 +96,7 @@ body {
     text-decoration: none;
 }
 
+/* Styles for the gifs container and wrapper */
 .gifs-container {
     overflow: hidden;
     position: relative;
@@ -119,7 +133,7 @@ body {
     color: #000000;
 }
 
-/* Dark Mode Styles */
+/* Styles to control the display of icons based on light or dark mode */
 .dark-mode-button .fa-crown {
     display: none;
 }
@@ -136,8 +150,9 @@ body.dark-mode .dark-mode-button .fa-hat-wizard {
     display: none;
 }
 
+/* Styles for dark mode including colors, backgrounds, and fonts */
 body.dark-mode {
-    background-color: #21073a;
+    background-color: #12194a;
     color: #ffffff;
 }
 

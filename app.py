@@ -7,7 +7,6 @@ from models import db, connect_db, User, FavoriteCharacter
 from flask_bcrypt import Bcrypt
 from functools import wraps
 
-
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///disney'
@@ -18,19 +17,23 @@ app.config['SECRET_KEY'] = "topsecret"
 
 bcrypt = Bcrypt(app)
 
+# Configure the LoginManager part of the app instance
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-connect_db(app) 
+connect_db(app)
 
+# Function to reload the user object from the user ID stored in the session
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
 BASE_URL = "https://api.disneyapi.dev"
 
+# Routes
 
+# Main route #############################################################################
 @app.route("/")
 def index():
     if current_user.is_authenticated:
@@ -38,21 +41,21 @@ def index():
     else:
         return render_template("landing_page.html")
 
-
 @app.route("/guest")
 def guest():
     return render_template("index.html")
 
-# User Routes ##############################################################
+# User Routes #############################################################################
 
 @app.route('/users/<string:username>', methods=['GET', 'POST'])
 def user_profile(username):
+    # Check if the current user is authenticated and the username matches
     if not current_user.is_authenticated or current_user.username != username:
         abort(403)
 
     user = User.query.filter_by(username=username).first_or_404()
 
-    # Query for the user's favorite characters
+    # Get user's favorite characters
     favorite_characters = FavoriteCharacter.query.filter_by(user_id=user.id).all()
 
     edit_form = EditUserForm(obj=user)
@@ -68,9 +71,10 @@ def user_profile(username):
 
     return render_template("user_profile.html", edit_form=edit_form, user=user, favorite_characters=favorite_characters)
 
-
+# Delete user route 
 @app.route("/users/delete/<string:username>", methods=["POST"])
 def delete_user(username):
+    # Ensure the current user is authenticated and the username matches
     if not current_user.is_authenticated or current_user.username != username:
         abort(403)
     
@@ -84,112 +88,7 @@ def delete_user(username):
     flash("Your account has been deleted.", "success")
     return redirect(url_for("index"))
 
-
-# Character Routes ########################################################
-
-# Error handling function
-def handle_api_errors(api_func):
-    @wraps(api_func)
-    def wrapper(*args, **kwargs):
-        try:
-            return api_func(*args, **kwargs)
-        except requests.exceptions.JSONDecodeError:
-            flash("There was an issue retrieving data from the API. Please try again later.", "error")
-            return redirect(url_for("index"))
-    return wrapper
-
-@app.route("/characters")
-@handle_api_errors
-def all_characters():
-    page = request.args.get("page", 1)
-    response = requests.get(f"{BASE_URL}/character?page={page}")
-    data = response.json()
-    return render_template("characters.html", data=data)
-
-@app.route("/character/<int:character_id>")
-@handle_api_errors
-def single_character(character_id):
-    response = requests.get(f"{BASE_URL}/character/{character_id}")
-    data = response.json()
-    return render_template("character.html", data=data["data"])
-
-@app.route("/filter-character")
-@handle_api_errors
-def filter_character():
-    name = request.args.get("name")
-    response = requests.get(f"{BASE_URL}/character?name={name}")
-    data = response.json()
-    return render_template("characters.html", data=data)
-
-
-@app.route('/favorite_character/<character_id>', methods=['POST'])
-@login_required
-def favorite_character(character_id):
-    if not current_user.is_authenticated:
-        return redirect(url_for("login"))
-
-    print(f"Current User ID: {current_user.id}")
-    print(f"Character ID: {character_id}")
-
-    # Fetch character details from the API
-    response = requests.get(f"{BASE_URL}/character/{character_id}")
-    if response.status_code == 200:
-        data = response.json()
-        character_name = data["data"]["name"]
-        character_image_url = data["data"]["imageUrl"]
-    else:
-        character_name = "Unknown Character"
-        character_image_url = "image.jpg"
-
-    favorite = FavoriteCharacter.query.filter_by(user_id=current_user.id, character_id=character_id).first()
-    if favorite:
-        print("Favorite found, deleting")
-        db.session.delete(favorite)
-    else:
-        print("No favorite found, adding new favorite")
-        new_favorite = FavoriteCharacter(
-            user_id=current_user.id,
-            character_id=character_id,
-            name=character_name,
-            image_url=character_image_url
-        )
-        db.session.add(new_favorite)
-
-    db.session.commit()
-    return redirect(url_for("user_profile", username=current_user.username))
-
-
-
-
-# Search ###################################################################
-
-@app.route('/search', methods=['GET'])
-def search_characters():
-    query = request.args.get('query')
-    if not query:
-        return redirect(url_for('index'))
-    
-    # Properly encode the query to handle multiple words
-    encoded_query = requests.utils.quote(query)
-
-    # Search by character name
-    url = f"https://api.disneyapi.dev/character?name={encoded_query}"
-    response = requests.get(url)
-    data = response.json()
-    characters = data.get('data', [])
-
-    # Search by movie
-    if not characters:
-        url = f"https://api.disneyapi.dev/character?films={encoded_query}"
-        response = requests.get(url)
-        data = response.json()
-        characters = data.get('data', [])
-    
-    return render_template('search_results.html', characters=characters)
-
-
-# Register ###################################################################
-
+# Registration route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """Register a user: produce form and handle form submission."""
@@ -222,8 +121,7 @@ def register():
         return render_template("register.html", form=form)
 
 
-# Login ######################################################################
-
+# Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Produce login form or handle login."""
@@ -247,10 +145,7 @@ def login():
 
     return render_template("login.html", form=form)
 
-
-
-# Logout #####################################################################
-
+# Logout route
 @app.route("/logout")
 def logout():
     """Logout route."""
@@ -259,8 +154,104 @@ def logout():
     return redirect("/login")
 
 
-# Error Handler ##############################################################
+# Character Routes ############################################################################
 
+# Error handling function for API calls
+def handle_api_errors(api_func):
+    @wraps(api_func)
+    def wrapper(*args, **kwargs):
+        try:
+            return api_func(*args, **kwargs)
+        except requests.exceptions.JSONDecodeError:
+            flash("There was an issue retrieving data from the API. Please try again later.", "error")
+            return redirect(url_for("index"))
+    return wrapper
+
+@app.route("/characters")
+@handle_api_errors
+def all_characters():
+    page = request.args.get("page", 1)
+    response = requests.get(f"{BASE_URL}/character?page={page}")
+    data = response.json()
+    return render_template("characters.html", data=data)
+
+# Route for individual character
+@app.route("/character/<int:character_id>")
+@handle_api_errors
+def single_character(character_id):
+    response = requests.get(f"{BASE_URL}/character/{character_id}")
+    data = response.json()
+    return render_template("character.html", data=data["data"])
+
+# Route for filtering character by name
+@app.route("/filter-character")
+@handle_api_errors
+def filter_character():
+    name = request.args.get("name")
+    response = requests.get(f"{BASE_URL}/character?name={name}")
+    data = response.json()
+    return render_template("characters.html", data=data)
+
+
+# Route for adding character to favorites
+@app.route('/favorite_character/<character_id>', methods=['POST'])
+@login_required
+def favorite_character(character_id):
+    if not current_user.is_authenticated:
+        return redirect(url_for("login"))
+
+    # Fetch character details from the API
+    response = requests.get(f"{BASE_URL}/character/{character_id}")
+    if response.status_code == 200:
+        data = response.json()
+        character_name = data["data"]["name"]
+        character_image_url = data["data"]["imageUrl"]
+    else:
+        character_name = "Unknown Character"
+        character_image_url = "image.jpg"
+
+    favorite = FavoriteCharacter.query.filter_by(user_id=current_user.id, character_id=character_id).first()
+    if favorite:
+        db.session.delete(favorite)
+    else:
+        new_favorite = FavoriteCharacter(
+            user_id=current_user.id,
+            character_id=character_id,
+            name=character_name,
+            image_url=character_image_url
+        )
+        db.session.add(new_favorite)
+
+    db.session.commit()
+    return redirect(url_for("user_profile", username=current_user.username))
+
+
+# Search route ############################################################################
+@app.route('/search', methods=['GET'])
+def search_characters():
+    query = request.args.get('query')
+    if not query:
+        return redirect(url_for('index'))
+    
+    encoded_query = requests.utils.quote(query)
+
+    # Search by character name
+    url = f"https://api.disneyapi.dev/character?name={encoded_query}"
+    response = requests.get(url)
+    data = response.json()
+    characters = data.get('data', [])
+
+    # Search by movie
+    if not characters:
+        url = f"https://api.disneyapi.dev/character?films={encoded_query}"
+        response = requests.get(url)
+        data = response.json()
+        characters = data.get('data', [])
+    
+    return render_template('search_results.html', characters=characters)
+
+
+# 404 error handling ########################################################################
 @app.errorhandler(404)
 def page_not_found(e):
     """404 NOT FOUND page."""
@@ -268,7 +259,15 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
+# Adding non-caching headers on every request for development purposes
+@app.after_request
+def add_header(req):
+    """Add non-caching headers on every request."""
 
-
+    req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    req.headers["Pragma"] = "no-cache"
+    req.headers["Expires"] = "0"
+    req.headers['Cache-Control'] = 'public, max-age=0'
+    return req
 
 

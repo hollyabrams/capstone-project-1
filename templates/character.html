@@ -1,12 +1,23 @@
+<!-- 
+    This template extends the base.html and represents a Single Character Detail Page of the website.
+    
+    The 'content' block includes an image of the character, character's name, and if user is authenticated, an option to favorite or unfavorite the character.
+    
+    It also displays information about films, TV shows, video games, and park attractions the character is associated with. It also includes a button to go back to the Characters page.
+-->
+
 {% extends "base.html" %}
 
 {% block content %}
+    <!-- Character details container -->
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="text-center character-info-container p-3">
+                    <!-- Character image and name -->
                     <img src="{{ data.imageUrl }}" alt="{{ data.name }}" class="character-image rounded">
                     <h2 class="mt-4 character-name">{{ data.name }}</h2>
+                    <!-- Favorite character option for authenticated users -->
                     {% if current_user.is_authenticated %}
                     {% set is_favorite = False %}
                     {% for favorite in current_user.favorite_characters %}
@@ -20,15 +31,19 @@
                         </form>
                     {% else %}
                         <form method="post" action="{{ url_for('favorite_character', character_id=data._id) }}" class="d-inline">
-                            <button type="submit" class="btn btn-link text-danger p-0"><i id="favorite-icon" class="far fa-heart"></i></button>
+                            <button id="favButton" type="submit" class="btn btn-link text-danger p-0">
+                                <i id="favorite-icon" class="fas fa-heart"></i>
+                            </button>                            
                         </form>
                     {% endif %}
                 {% endif %}                                                         
                 </div>
             </div>
         </div>
+
+        <!-- Information about films, TV shows, video games, and park attractions -->
         <div class="row mt-4">
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header text-white" style="background-color: #0275d8;">Films</div>
                     <div class="card-body">
@@ -36,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header text-white" style="background-color: #5bc0de;">TV Shows</div>
                     <div class="card-body">
@@ -44,7 +59,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header text-white" style="background-color: #5cb85c;">Video Games</div>
                     <div class="card-body">
@@ -52,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header text-white" style="background-color: #f0ad4e;">Park Attractions</div>
                     <div class="card-body">
@@ -61,6 +79,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Button to go back to the Characters page -->
         <div class="row mt-4">
             <div class="col-md-12 text-center">
                 {% if current_user.is_authenticated %}
@@ -71,11 +91,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Script for toggling the favorite icon -->
     <script>
         document.getElementById('favorite-icon').addEventListener('click', function() {
             this.classList.toggle('fas');
             this.classList.toggle('far');
         });
-    </script> 
-     
+    </script>    
 {% endblock %}

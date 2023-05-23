@@ -1,17 +1,32 @@
+<!-- 
+    This template extends the base.html and represents the Home Page of the website.
+    
+    The 'content' block includes a welcome jumbotron section, a buttons section for registration,
+    login, and guest browsing, and a container to display a series of gifs related to Disney 
+    characters. 
+
+    The page also includes a JavaScript block which controls the animation of the gifs,
+    pausing the animation when the mouse enters the gifs container, and resuming the animation 
+    when the mouse leaves the gifs container.
+-->
+
 {% extends 'base.html' %}
 
 {% block content %}
+    <!-- Jumbotron section welcoming users -->
     <div class="jumbotron text-center mt-5">
         <h1 class="display-4">Welcome to the Disney Characterverse!</h1>
         <p class="lead">Explore the magical Disney universe and uncover the movies and park attractions featuring your favorite characters!</p>
     </div>
 
+    <!-- Buttons for registration, login, and guest browsing -->
     <div class="buttons mt-5 text-center">
         <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mx-2">Register</a>
         <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg mx-2">Log In</a>
         <a href="{{ url_for('guest') }}" class="btn btn-outline-primary btn-lg mx-2">Continue as Guest</a>
     </div>
 
+    <!-- Gifs container displaying a series of Disney character gifs -->
     <div class="gifs-container mt-5">
         <div class="gifs-wrapper">
             <div class="gifs-scroll">
@@ -26,5 +41,19 @@
             </div>
         </div>
     </div>
+
+    <!-- JavaScript block controlling gif animation -->
+    <script>
+    const gifsContainer = document.querySelector('.gifs-container');
+    const gifsWrapper = document.querySelector('.gifs-wrapper');
+
+    gifsContainer.addEventListener('mouseenter', () => {
+        gifsWrapper.style.animationPlayState = 'paused';
+    });
+
+    gifsContainer.addEventListener('mouseleave', () => {
+        gifsWrapper.style.animationPlayState = 'running';
+    });
+    </script>
 {% endblock %}
 

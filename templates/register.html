@@ -1,16 +1,42 @@
+<!-- 
+    This template extends the base.html and represents the Registration Page of the website.
+    
+    The 'title' block sets the page title to "Register User".
+
+    The 'content' block includes a form for users to register. The form includes fields for 
+    entering the user information and a button to submit the form.
+
+    If there are errors in the form (for instance, incomplete user information), 
+    these are displayed at the top of the form. 
+
+    The page also includes a brief explanation of the benefits of registering an account.
+-->
+
 {% extends 'base.html' %}
 
 {% block title %}
+<!-- Page title -->
 Register User
 {% endblock %}
 
 {% block content %}
 
+<!-- Registration form wrapper -->
 <div class='mt-5' style="width: 50%; margin: 0 auto;">
+    <!-- Title -->
     <h1 class="mb-3">Register</h1>
+
+    <!-- Explanation of registration benefits -->
+    <p class="lead">
+    Registering for an account allows you to save your favorite Disney characters for easy access on future visits. 
+    </p>
+    
+    <!-- Form -->
     <form method="POST">
+        <!-- Hidden fields -->
         {{form.hidden_tag()}}
 
+        <!-- Loop over form errors and display them -->
         {% for field in form.errors %}
         <div class="alert alert-danger">{{ field }}:
             <ul>
@@ -21,17 +47,22 @@ Register User
         </div>
         {% endfor %}
 
+        <!-- Loop over form fields (excluding hidden fields) and display them -->
         {% for field in form if field.widget.input_type != 'hidden' %}
         <div class="form-group row mt-1">
+            <!-- Field label -->
             {{field.label(class="col-sm-2 col-form-label")}}
+            <!-- Field input -->
             <div class="col-sm-10">
                 {{field(class="form-control")}}
             </div>
         </div>
         {% endfor %}
 
+        <!-- Submit button -->
         <button class="btn btn-primary mt-5">Register!</button>
     </form>
 </div>
-
 {% endblock %}
+
+

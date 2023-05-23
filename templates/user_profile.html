@@ -1,3 +1,18 @@
+<!-- 
+    This template is for the User Profile page of the website. It extends the base.html template, 
+    and fills in the 'title' and 'content' blocks.
+
+    The 'title' block is set to "User Profile".
+
+    The 'content' block includes a personal greeting to the user, using their username.
+
+    Two forms are present on this page. The first one allows users to edit their profile information. Error handling is implemented for each field of the form. The form includes all visible fields present in the 'edit_form' object, along with their labels.
+
+    The second form allows users to delete their account. Upon clicking the 'Delete Account' button, a confirmation prompt appears, asking the user to confirm their intention to delete their account.
+
+    The last part of the page displays the list of the user's favorite Disney characters. If the user hasn't added any favorite characters yet, a message indicating this will be shown.
+-->
+
 {% extends 'base.html' %}
 
 {% block title %}
@@ -8,9 +23,11 @@ User Profile
 
 <h1 class="mt-4 mb-3">Hello, {{ user.username }}!</h1>
 
+<!-- Profile editing form -->
 <form method="POST">
     {{edit_form.csrf_token}}
 
+    <!-- Errors for each form field are displayed here -->
     {% for field in edit_form.errors %}
     <div class="alert alert-danger">{{ field }}:
         <ul>
@@ -21,6 +38,7 @@ User Profile
     </div>
     {% endfor %}
 
+    <!-- The form fields are rendered here -->
     {% for field in edit_form if field.widget.input_type != 'hidden' %}
     <div class="form-group row mt-1">
         {{field.label(class="col-sm-2 col-form-label")}}
@@ -33,7 +51,7 @@ User Profile
     <button class="btn btn-primary mt-3">Update</button>
 </form>
 
-
+<!-- Account deletion form -->
 <form action="{{ url_for('delete_user', username=user.username) }}" method="POST" class="d-inline">
     {{ edit_form.csrf_token }}
     <button type="submit" class="btn btn-danger mt-3 mb-5" onclick="return confirm('Are you sure you want to delete your account?')">Delete Account</button>
@@ -43,6 +61,7 @@ User Profile
 <h2 class="mb-3">Favorite Characters</h2>
 {% if favorite_characters %}
     <div class="row">
+        <!-- For each favorite character, a card is generated with the character's image, name, and a link to their details page -->
         {% for favorite in favorite_characters %}
             <div class="col-md-3 mb-3">
                 <div class="card search-result-card">
@@ -58,6 +77,6 @@ User Profile
 {% else %}
     <p>No favorite characters added yet.</p>
 {% endif %}
-
 {% endblock %}
+
 

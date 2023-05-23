@@ -1,11 +1,24 @@
+<!-- 
+    This template extends the base.html and represents a 404 (Not Found) error page of the website.
+    
+    The 'content' block includes a heading and a paragraph to inform the user that the requested page couldn't be found. It also includes a button to navigate back to the home page.
+-->
+
 {% extends "base.html" %}
 
-{% block title %}404 Not Found{% endblock %}
+{% block title %}
+<!-- Title for the error page -->
+404 Not Found
+{% endblock %}
 
 {% block content %}
+    <!-- Error message container -->
     <div class="container">
+        <!-- Error heading -->
         <h1 class="mt-5">404 Not Found</h1>
+        <!-- Error description -->
         <p class="lead">Oops! The page you are looking for could not be found.</p>
+        <!-- Button to navigate back to the home page -->
         <a href="{{ url_for('index') }}" class="btn btn-primary">Go Back to Home Page</a>
     </div>
 {% endblock %}

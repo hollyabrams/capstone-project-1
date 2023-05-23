@@ -1,13 +1,27 @@
+<!-- 
+    This template extends the base.html and represents a welcome page for the Disney Characterverse website.
+
+    The 'content' block includes a welcoming jumbotron message and a section that features selected characters.
+
+    Each character is represented by a card which contains an image, name and a link to their detailed page.
+-->
+
 {% extends "base.html" %}
 
 {% block content %}
+
+    <!-- Jumbotron greeting -->
     <div class="jumbotron text-center mt-5">
         <h1 class="display-4">Welcome to the Disney Characterverse!</h1>
         <p class="lead">Explore the magical Disney universe and uncover the movies and park attractions featuring your favorite characters!</p>
     </div>
 
+    <!-- Featured Characters section -->
     <h2 class="mb-5 text-center">Featured Characters</h2>
+    
+    <!-- Characters grid -->
     <div class="row">
+        <!-- Mickey Mouse card -->
         <div class="col-md-3">
             <a href="{{ url_for('single_character', character_id=4703) }}" class="card-link">
                 <div class="card character-card-index">
@@ -18,6 +32,8 @@
                 </div>
             </a>
         </div>
+        
+        <!-- Donald Duck card -->
         <div class="col-md-3">
             <a href="{{ url_for('single_character', character_id=1947) }}" class="card-link">
                 <div class="card character-card-index">
@@ -28,6 +44,8 @@
                 </div>
             </a>
         </div>
+        
+        <!-- Goofy card -->
         <div class="col-md-3">
             <a href="{{ url_for('single_character', character_id=2755) }}" class="card-link">
                 <div class="card character-card-index">
@@ -38,6 +56,8 @@
                 </div>
             </a>
         </div>
+        
+        <!-- Pluto card -->
         <div class="col-md-3">
             <a href="{{ url_for('single_character', character_id=5371) }}" class="card-link">
                 <div class="card character-card-index">
@@ -50,6 +70,7 @@
         </div>
     </div>
 {% endblock %}
+
 
 
 

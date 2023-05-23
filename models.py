@@ -2,20 +2,21 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 
-
 bcrypt = Bcrypt()
 db = SQLAlchemy()
 
-
 class User(db.Model):
+    """User model."""
+
     __tablename__ = 'users' 
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+
     favorite_characters = db.relationship('FavoriteCharacter', backref='user', lazy=True)
 
-    # Flask-Login integration
     def is_authenticated(self):
         return True
 
@@ -68,6 +69,8 @@ class User(db.Model):
 
 
 class FavoriteCharacter(db.Model):
+    """FavoriteCharacter model."""
+
     id = db.Column(db.Integer, primary_key=True)
     character_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -79,10 +82,7 @@ class FavoriteCharacter(db.Model):
         return f"FavoriteCharacter('{self.name}','{self.character_id}', '{self.user_id}')"
 
 
-
-
 def connect_db(app):
     """Connect this database to Flask app."""
     db.app = app
     db.init_app(app)
-
