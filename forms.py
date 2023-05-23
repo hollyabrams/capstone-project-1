@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, BooleanField
 from wtforms.validators import InputRequired, Length, DataRequired, Email
 from models import User
 
@@ -18,7 +18,7 @@ class RegisterForm(FlaskForm):
 
     email = StringField(
         "Email",
-        validators=[InputRequired(), Length(max=50)],
+        validators=[InputRequired(), Length(max=50), Email()],
     )
 
 
@@ -49,6 +49,4 @@ class EditUserForm(FlaskForm):
 class AddFavoriteCharacterForm(FlaskForm):
     """Form for adding favorite characters."""
 
-    character_id = IntegerField('Character ID', validators=[DataRequired()])
-
-    submit = SubmitField('Add to Favorites')
+    csrf_token = StringField('CSRF Token', validators=[DataRequired()])

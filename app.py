@@ -1,5 +1,6 @@
 import requests
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, jsonify, g, get_flashed_messages
+from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_login import login_required, current_user, logout_user, login_user
 from forms import RegisterForm, LoginForm, EditUserForm, AddFavoriteCharacterForm
@@ -36,19 +37,22 @@ BASE_URL = "https://api.disneyapi.dev"
 # Main route #############################################################################
 @app.route("/")
 def index():
+    form = FlaskForm()
     if current_user.is_authenticated:
-        return render_template("index.html")
+        return render_template("index.html", form=form)
     else:
-        return render_template("landing_page.html")
+        return render_template("landing_page.html", form=form)
 
 @app.route("/guest")
 def guest():
-    return render_template("index.html")
+    form = FlaskForm()
+    return render_template("index.html", form=form)
 
 # User Routes #############################################################################
 
 @app.route('/users/<string:username>', methods=['GET', 'POST'])
 def user_profile(username):
+    form = FlaskForm()
     # Check if the current user is authenticated and the username matches
     if not current_user.is_authenticated or current_user.username != username:
         abort(403)
@@ -69,7 +73,7 @@ def user_profile(username):
 
         return redirect(url_for("user_profile", username=user.username))
 
-    return render_template("user_profile.html", edit_form=edit_form, user=user, favorite_characters=favorite_characters)
+    return render_template("user_profile.html", edit_form=edit_form, user=user, favorite_characters=favorite_characters, form=form)
 
 # Delete user route 
 @app.route("/users/delete/<string:username>", methods=["POST"])
@@ -181,7 +185,16 @@ def all_characters():
 def single_character(character_id):
     response = requests.get(f"{BASE_URL}/character/{character_id}")
     data = response.json()
-    return render_template("character.html", data=data["data"])
+    form = AddFavoriteCharacterForm() 
+    favorite_characters = [str(char.character_id) for char in current_user.favorite_characters]
+
+    if current_user.is_authenticated:
+        is_favorite = any(fav.character_id == character_id for fav in current_user.favorite_characters)
+    else:
+        is_favorite = False
+    
+    return render_template("character.html", data=data["data"], form=form, is_favorite=is_favorite, favorite_characters=",".join(favorite_characters))
+
 
 # Route for filtering character by name
 @app.route("/filter-character")
@@ -197,9 +210,6 @@ def filter_character():
 @app.route('/favorite_character/<character_id>', methods=['POST'])
 @login_required
 def favorite_character(character_id):
-    if not current_user.is_authenticated:
-        return redirect(url_for("login"))
-
     # Fetch character details from the API
     response = requests.get(f"{BASE_URL}/character/{character_id}")
     if response.status_code == 200:
@@ -213,6 +223,8 @@ def favorite_character(character_id):
     favorite = FavoriteCharacter.query.filter_by(user_id=current_user.id, character_id=character_id).first()
     if favorite:
         db.session.delete(favorite)
+        db.session.commit()
+        return jsonify({"status": "unfavorited"})
     else:
         new_favorite = FavoriteCharacter(
             user_id=current_user.id,
@@ -221,34 +233,40 @@ def favorite_character(character_id):
             image_url=character_image_url
         )
         db.session.add(new_favorite)
+        db.session.commit()
+        return jsonify({"status": "favorited"})
 
-    db.session.commit()
-    return redirect(url_for("user_profile", username=current_user.username))
+
 
 
 # Search route ############################################################################
 @app.route('/search', methods=['GET'])
 def search_characters():
+    form = FlaskForm()
     query = request.args.get('query')
     if not query:
         return redirect(url_for('index'))
     
-    encoded_query = requests.utils.quote(query)
+    query_tokens = query.split(' ')
+    characters = []
 
-    # Search by character name
-    url = f"https://api.disneyapi.dev/character?name={encoded_query}"
-    response = requests.get(url)
-    data = response.json()
-    characters = data.get('data', [])
+    for token in query_tokens:
+        encoded_token = requests.utils.quote(token)
 
-    # Search by movie
-    if not characters:
-        url = f"https://api.disneyapi.dev/character?films={encoded_query}"
+        # Search by character name
+        url = f"https://api.disneyapi.dev/character?name={encoded_token}"
         response = requests.get(url)
         data = response.json()
-        characters = data.get('data', [])
-    
-    return render_template('search_results.html', characters=characters)
+        characters += data.get('data', [])
+
+    # Filter out non-dictionary items
+    characters = [character for character in characters if isinstance(character, dict)]
+
+    # Remove duplicate characters from the list
+    characters = list({character['_id']: character for character in characters}.values())
+
+    return render_template('search_results.html', characters=characters, form=form)
+
 
 
 # 404 error handling ########################################################################

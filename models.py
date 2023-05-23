@@ -71,6 +71,8 @@ class User(db.Model):
 class FavoriteCharacter(db.Model):
     """FavoriteCharacter model."""
 
+    __tablename__ = 'favorite_character'
+
     id = db.Column(db.Integer, primary_key=True)
     character_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -80,6 +82,11 @@ class FavoriteCharacter(db.Model):
 
     def __repr__(self):
         return f"FavoriteCharacter('{self.name}','{self.character_id}', '{self.user_id}')"
+
+    @classmethod
+    def is_favorite(cls, user_id, character_id):
+        return db.session.query(cls).filter_by(user_id=user_id, character_id=character_id).first() is not None
+
 
 
 def connect_db(app):

@@ -19,24 +19,11 @@
                     <h2 class="mt-4 character-name">{{ data.name }}</h2>
                     <!-- Favorite character option for authenticated users -->
                     {% if current_user.is_authenticated %}
-                    {% set is_favorite = False %}
-                    {% for favorite in current_user.favorite_characters %}
-                        {% if favorite.character_id == data._id %}
-                            {% set is_favorite = True %}
-                        {% endif %}
-                    {% endfor %}
-                    {% if is_favorite %}
-                        <form method="post" action="{{ url_for('unfavorite_character', character_id=data._id) }}" class="d-inline">
-                            <button type="submit" class="btn btn-link text-danger p-0"><i id="favorite-icon" class="fas fa-heart"></i></button>
-                        </form>
-                    {% else %}
-                        <form method="post" action="{{ url_for('favorite_character', character_id=data._id) }}" class="d-inline">
-                            <button id="favButton" type="submit" class="btn btn-link text-danger p-0">
-                                <i id="favorite-icon" class="fas fa-heart"></i>
-                            </button>                            
-                        </form>
-                    {% endif %}
-                {% endif %}                                                         
+                        <input type="hidden" id="favorite-characters" value="{{ favorite_characters }}">
+                        <button id="favButton" type="button" class="btn btn-link text-danger p-0" data-url="{{ url_for('favorite_character', character_id=data._id) }}">
+                            <i id="favorite-icon" class="{{ 'fas' if is_favorite else 'far' }} fa-heart"></i>
+                        </button>  
+                    {% endif %}                                 
                 </div>
             </div>
         </div>
@@ -79,24 +66,49 @@
                 </div>
             </div>
         </div>
+    
+    {% if current_user.is_authenticated %}
+        <script>
+            window.onload = function() {
+                var favorite_characters = document.getElementById('favorite-characters').value.split(",");
+                var character_id = "{{data._id}}";
+                if (favorite_characters.includes(character_id)) {
+                    // Update the heart icon to be filled in
+                    document.getElementById('favorite-icon').classList.add('fas');
+                    document.getElementById('favorite-icon').classList.remove('far');
+                } else {
+                    // Update the heart icon to be empty
+                    document.getElementById('favorite-icon').classList.remove('fas');
+                    document.getElementById('favorite-icon').classList.add('far');
+                }
+            };
+        </script>
+    {% endif %}
 
-        <!-- Button to go back to the Characters page -->
-        <div class="row mt-4">
-            <div class="col-md-12 text-center">
-                {% if current_user.is_authenticated %}
-                <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">Back to Characters</a>
-            {% else %}
-                <a href="{{ url_for('guest') }}" class="btn btn-primary mt-3">Back to Characters</a>
-            {% endif %}            
-            </div>
-        </div>
-    </div>
-
-    <!-- Script for toggling the favorite icon -->
+    <!-- JavaScript for favoriting/unfavoriting a character -->
+    {% if current_user.is_authenticated %}
     <script>
-        document.getElementById('favorite-icon').addEventListener('click', function() {
-            this.classList.toggle('fas');
-            this.classList.toggle('far');
-        });
-    </script>    
+        document.getElementById('favButton').onclick = function() {
+            var url = this.getAttribute('data-url');
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ form.csrf_token._value() }}"  // get the CSRF token from the form
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const heart = document.getElementById('favorite-icon');
+                if (data.status === 'favorited') {
+                    heart.classList.remove('far');
+                    heart.classList.add('fas');
+                } else {
+                    heart.classList.remove('fas');
+                    heart.classList.add('far');
+                }
+            });
+        }
+    </script>
+    {% endif %}
 {% endblock %}
