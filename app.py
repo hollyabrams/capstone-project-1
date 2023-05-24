@@ -239,8 +239,6 @@ def favorite_character(character_id):
         return jsonify({"status": "favorited"})
 
 
-
-
 # Search route ############################################################################
 @app.route('/search', methods=['GET'])
 def search_characters():
@@ -261,6 +259,34 @@ def search_characters():
         data = response.json()
         characters += data.get('data', [])
 
+        # Search by TV shows
+        if not characters:
+            url = f"https://api.disneyapi.dev/character?tvShows={encoded_token}"
+            response = requests.get(url)
+            data = response.json()
+            characters += data.get('data', [])
+        
+        # Search by park attractions
+        if not characters:
+            url = f"https://api.disneyapi.dev/character?parkAttractions={encoded_token}"
+            response = requests.get(url)
+            data = response.json()
+            characters += data.get('data', [])
+        
+        # Search by video games
+        if not characters:
+            url = f"https://api.disneyapi.dev/character?videoGames={encoded_token}"
+            response = requests.get(url)
+            data = response.json()
+            characters += data.get('data', [])
+        
+        # Search by films
+        if not characters:
+            url = f"https://api.disneyapi.dev/character?films={encoded_token}"
+            response = requests.get(url)
+            data = response.json()
+            characters += data.get('data', [])
+    
     # Filter out non-dictionary items
     characters = [character for character in characters if isinstance(character, dict)]
 
@@ -268,7 +294,6 @@ def search_characters():
     characters = list({character['_id']: character for character in characters}.values())
 
     return render_template('search_results.html', characters=characters, form=form)
-
 
 
 # 404 error handling ########################################################################
