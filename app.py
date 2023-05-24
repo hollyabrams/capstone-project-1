@@ -185,15 +185,17 @@ def all_characters():
 def single_character(character_id):
     response = requests.get(f"{BASE_URL}/character/{character_id}")
     data = response.json()
-    form = AddFavoriteCharacterForm() 
-    favorite_characters = [str(char.character_id) for char in current_user.favorite_characters]
+    form = AddFavoriteCharacterForm()
 
     if current_user.is_authenticated:
+        favorite_characters = [str(char.character_id) for char in current_user.favorite_characters]
         is_favorite = any(fav.character_id == character_id for fav in current_user.favorite_characters)
     else:
+        favorite_characters = []
         is_favorite = False
     
     return render_template("character.html", data=data["data"], form=form, is_favorite=is_favorite, favorite_characters=",".join(favorite_characters))
+
 
 
 # Route for filtering character by name
