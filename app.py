@@ -1,4 +1,5 @@
 import requests
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, jsonify, g, get_flashed_messages
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
@@ -10,7 +11,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///disney'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql:///disney')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
