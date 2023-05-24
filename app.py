@@ -11,11 +11,15 @@ from functools import wraps
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///disney'
+DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql:///disney')
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.config['SECRET_KEY'] = "topsecret"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'topsecret') 
 
 bcrypt = Bcrypt(app)
 
