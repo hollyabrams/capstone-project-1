@@ -86,11 +86,16 @@ def delete_user(username):
     if user is None:
         abort(404)
 
+    # Deleting favorite characters of the user before deleting the user
+    for character in user.favorite_characters:
+        db.session.delete(character)
+        
     db.session.delete(user)
     db.session.commit()
     logout_user()
     flash("Your account has been deleted.", "success")
     return redirect(url_for("index"))
+
 
 # Registration route
 @app.route('/register', methods=['GET', 'POST'])
@@ -299,9 +304,10 @@ def search_characters():
 # 404 error handling ########################################################################
 @app.errorhandler(404)
 def page_not_found(e):
+    form = FlaskForm()
     """404 NOT FOUND page."""
 
-    return render_template('404.html'), 404
+    return render_template('404.html', form=form), 404
 
 
 # Adding non-caching headers on every request for development purposes
