@@ -1,7 +1,7 @@
 # Disney Characterverse
 ![Disney Characterverse App](static/images/welcome-page.png)
 
-[Disney Characterverse](https://your-deployed-website-url.com) is a web application that allows users to explore, learn about, and save their favorite Disney characters.
+[Disney Characterverse](https://disney-characterverse.onrender.com/) is a web application that allows users to explore, learn about, and save their favorite Disney characters.
 
 ## Description
 
