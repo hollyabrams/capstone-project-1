@@ -14,17 +14,18 @@
 
 {% block content %}
     <!-- Jumbotron section welcoming users -->
-    <div class="jumbotron text-center mt-5">
+    <div class="jumbotron text-center mt-4">
         <h1 class="display-4">Welcome to the Disney Characterverse!</h1>
         <p class="lead">Explore the magical Disney universe and uncover the movies and park attractions featuring your favorite characters!</p>
     </div>
 
     <!-- Buttons for registration, login, and guest browsing -->
     <div class="buttons mt-5 text-center">
-        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mx-2">Register</a>
-        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg mx-2">Log In</a>
-        <a href="{{ url_for('guest') }}" class="btn btn-outline-primary btn-lg mx-2">Continue as Guest</a>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mx-2 mt-2 mt-md-0">Register</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg mx-2 mt-2 mt-md-0">Log In</a>
+        <a href="{{ url_for('guest') }}" class="btn btn-outline-primary btn-lg mx-2 mt-2 mt-md-0">Continue as Guest</a>
     </div>
+
 
     <!-- Gifs container displaying a series of Disney character gifs -->
     <div class="gifs-container mt-5">
